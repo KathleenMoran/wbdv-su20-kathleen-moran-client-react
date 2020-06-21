@@ -1,5 +1,6 @@
 import React from "react";
 import CoursePage from "../images/CardImage.png"
+import {Link} from 'react-router-dom'
 
 class CourseGridCardComponent extends React.Component{
 
@@ -7,6 +8,7 @@ class CourseGridCardComponent extends React.Component{
         super(props)
         this.state = {
             active: false,
+            course: this.props.course,
             courseName: this.props.course.title,
             editing: false
         }
@@ -48,11 +50,11 @@ class CourseGridCardComponent extends React.Component{
                     <div className="card">
                         <img src={CoursePage} className="card-img-top border" alt="..."/>
                         <div className="card-body border">
-                            <a href="/course" onClick={event => event.stopPropagation()}>
+                            <Link to={`/courses/${this.state.course._id}/modules/moduleList/lessons/lessonList/topics/topicList`} onClick={event => event.stopPropagation()}>
                                 <h6 className="wbdv-course-title card-title">
                                     {this.props.course.title}
                                 </h6>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 }

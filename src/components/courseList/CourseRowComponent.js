@@ -1,10 +1,12 @@
 import React from "react";
+import {Link} from "react-router-dom"
 
 class CourseRowComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             active: false,
+            course: this.props.course,
             courseName: this.props.course.title,
             editing: false
         }
@@ -46,9 +48,9 @@ class CourseRowComponent extends React.Component {
                     {!this.state.active &&
                         <div className="row list-group-itm">
                             <div className="col-8 col-md-6 col-lg-6">
-                                <a href="/course" className="wbdv-course-title" onClick={event => event.stopPropagation()}>
+                                <Link to={`/courses/${this.state.course._id}/modules/moduleList/lessons/lessonList/topics/topicList`} className="wbdv-course-title" onClick={event => event.stopPropagation()}>
                                     {this.props.course.title}
-                                </a>
+                                </Link>
                             </div>
                             <div className="col-md-4 col-lg-2 text-center d-none d-md-block wbdv-row wbdv-owner">me</div>
                             <div className="col-lg-2 text-center d-none d-lg-block wbdv-row wbdv-modified-date">{this.props.course.dateModified}</div>
