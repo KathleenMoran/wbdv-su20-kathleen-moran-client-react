@@ -1,34 +1,27 @@
 import React from "react";
-import CourseHeadingComponent from "../components/CourseHeadingComponent";
-import CourseTableComponent from "../components/CourseTableComponent";
-import CourseGridComponent from "../components/CourseGridComponent";
-import CourseService from "../services/CourseService";
+import CourseEditorComponent from "../components/courseEditor/CourseEditorComponent";
+import CourseHeadingComponent from "../components/courseList/CourseHeadingComponent";
+import CourseTableComponent from "../components/courseList/CourseTableComponent";
+import CourseGridComponent from "../components/courseList/CourseGridComponent";
+import CourseService from "../services/courseService";
+import {BrowserRouter as Router, Link, Route, Redirect} from 'react-router-dom';
 
-const courseService = new CourseService();
+const courseService = new CourseService()
 
 class CourseManagerContainer extends React.Component {
     date
-
     state = {
-        layout: 'table',
         newCourseTitle: '',
-        courses: []
+        courses: [],
     }
 
     componentDidMount() {
         courseService.findAllCourses()
             .then(courses => {
                 this.setState({
-                    courses: courses
+                                  courses: courses
                 })
             })
-    }
-
-    toggle = () => {
-        this.setState(prevState => ({
-                layout: prevState.layout === 'table'? 'grid': 'table'
-            })
-        )
     }
 
     deleteCourse = (courseToDelete) => {
@@ -37,54 +30,54 @@ class CourseManagerContainer extends React.Component {
                 courseService.findAllCourses()
                     .then(courses => {
                         this.setState({
-                            courses: courses
+                                          courses: courses
                         })
                     })
             })
     }
 
     addCourse = () => {
-        this.date = new Date()
+        this.date = new Date();
+        this.state.newCourseTitle === ''? alert('Please Enter a Valid Course Title!'):
         courseService.createCourse({
-            title: this.state.newCourseTitle,
-            dateModified: this.date.getMonth() + 1 + '/' + this.date.getDate() + '/' + this.date.getFullYear()
-        }).then(() => {
+                                       title: this.state.newCourseTitle,
+                                       dateModified: this.date.getMonth()+1 + '/' + this.date.getDate() + '/' + this.date.getFullYear()}).then(() => {
             courseService.findAllCourses()
                 .then(courses => {
                     this.setState({
-                        courses: courses,
-                        newCourseTitle: '',
-                    })
+                                      courses: courses,
+                                      newCourseTitle: '',
+                                  })
                 })
-        })
+                                       })
     }
 
     updateFormState = (event) => {
         this.setState({
-            newCourseTitle: event.target.value
-        })
+                          newCourseTitle: event.target.value
+                      })
     }
 
     editCourse = (course) => {
         this.setState(prevState => ({
-                courses: prevState.courses.map (c => {
-                    c.editing = course._id === c._id
-                    return c
-                })
-            })
+                          courses: prevState.courses.map (crs => {
+                              crs.editing = course._id === crs._id;
+                              return crs
+                          })
+        })
         )
     }
 
     updateCourse = (course) => {
-        this.date = new Date()
-        course.dateModified =  this.date.getMonth() + 1 + '/' + this.date.getDate() + '/' + this.date.getFullYear()
+        this.date = new Date();
+        course.dateModified =  this.date.getMonth()+1 + '/' + this.date.getDate() + '/' + this.date.getFullYear();
         courseService.updateCourse(course._id, course)
             .then(() => {
                 courseService.findAllCourses()
                     .then(courses => {
-                            this.setState({
-                                courses: courses
-                            })
+                        this.setState({
+                                          courses: courses
+                        })
                     })
             })
     }
@@ -92,26 +85,42 @@ class CourseManagerContainer extends React.Component {
     render() {
         return (
             <div className="container-fluid p-0">
-                <CourseHeadingComponent
-                    updateFormState = {this.updateFormState}
-                    newCourseTitle = {this.state.newCourseTitle}
-                    addCourse = {this.addCourse}/>
-                {this.state.layout === 'grid' && <CourseGridComponent
-                    deleteCourse={this.deleteCourse}
-                    editCourse={this.editCourse}
-                    updateCourse={this.updateCourse}
-                    toggle={this.toggle}
-                    courses={this.state.courses}/>}
-                {this.state.layout === 'table' && <CourseTableComponent
-                    deleteCourse={this.deleteCourse}
-                    editCourse={this.editCourse}
-                    updateCourse={this.updateCourse}
-                    toggle={this.toggle}
-                    courses={this.state.courses}/>}
+                <Router>
+                    <Redirect from="/" to="/table"/>
+                    <Route path="/table" render={(props) =>
+                        <div>
+                            <CourseHeadingComponent
+                                updateFormState = {this.updateFormState}
+                                newCourseTitle = {this.state.newCourseTitle}
+                                addCourse = {this.addCourse}/>
+                            <CourseTableComponent
+                                {...props}
+                                deleteCourse={this.deleteCourse}
+                                editCourse={this.editCourse}
+                                updateCourse={this.updateCourse}
+                                courses={this.state.courses}/>
+                        </div>
+                    }/>
+                    <Route path="/grid" render={(props) =>
+                        <div>
+                            <CourseHeadingComponent
+                                updateFormState = {this.updateFormState}
+                                newCourseTitle = {this.state.newCourseTitle}
+                                addCourse = {this.addCourse}/>
+                            <CourseGridComponent
+                                {...props}
+                                deleteCourse={this.deleteCourse}
+                                editCourse={this.editCourse}
+                                updateCourse={this.updateCourse}
+                                toggle={this.toggle}
+                                courses={this.state.courses}/>
+                        </div>
+                    }/>
+                    <Route path="/courses/:courseId/modules/:moduleId/lessons/:lessonId/topics/:topicId" component={CourseEditorComponent}/>
+                </Router>
             </div>
         )
     }
 }
-
 
 export default CourseManagerContainer
