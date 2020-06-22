@@ -1,5 +1,5 @@
 import React from "react";
-import TopicPillsItemComponent from "./TopicPillsItemComponent";
+import TopicPillComponent from "./TopicPillComponent";
 
 
 class TopicPillsComponent extends React.Component {
@@ -17,7 +17,7 @@ class TopicPillsComponent extends React.Component {
                 return (
                     <div className="nav nav-pills nav-fill my-2 text-nowrap wbdv-topic-pill-list">
                             {this.props.topics && this.props.topics.map(topic =>
-                                                                            <TopicPillsItemComponent
+                                                                            <TopicPillComponent
                                                                                 topic = {topic}
                                                                                 key = {topic._id}
                                                                                 courseId = {this.props.courseId}

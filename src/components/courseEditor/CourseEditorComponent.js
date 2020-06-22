@@ -8,7 +8,7 @@ import topicReducer from "../../reducers/topicReducer";
 import ModuleListContainer from "../../containers/ModuleListContainer";
 import {combineReducers, createStore} from "redux";
 import LessonTabsContainer from "../../containers/LessonTabsContainer";
-import CourseEditorNavBarComponent from "./CourseEditorNavBarComponent";
+import NavBar from "./NavBar";
 import TopicPillsContainer from "../../containers/TopicPillsContainer";
 // import CourseEditorDropdownsContainer from "../../containers/CourseEditorDropdownsContainer";
 // import CourseEditorDropdownsComponent from "./CourseEditorDropdownsComponent";
@@ -25,19 +25,11 @@ const CourseEditorComponent = ({match, history}) =>
     <Provider store={store}>
         <div>
             <div className="container-fluid p-0">
-                <CourseEditorNavBarComponent
+                <NavBar
                     courseId = {match.params.courseId}
                     history = {history}
                 />
-                {/*<CourseEditorDropdownsContainer*/}
-                {/*    courseId = {match.params.courseId}*/}
-                {/*    moduleId = {match.params.moduleId}*/}
-                {/*    lessonId = {match.params.lessonId}*/}
-                {/*    history = {history}*/}
-                {/*    params = {match.params}*/}
-                {/*/>*/}
             </div>
-
             <div className="container-fluid p-0">
                 <div className="row">
                     <div className="col-3">
@@ -56,7 +48,6 @@ const CourseEditorComponent = ({match, history}) =>
                                                                        params = {match.params}/>
                                                                    :''}
                         </div>
-
                         <div>
                             {match.params.lessonId !== 'lessonList'? <TopicPillsContainer
                                                                        courseId = {match.params.courseId}
