@@ -1,5 +1,5 @@
 import React from "react";
-import CoursePage from "../images/CardImage.png"
+import CoursePage from "../../images/CardImage.png"
 import {Link} from 'react-router-dom'
 
 class CourseGridCardComponent extends React.Component{
